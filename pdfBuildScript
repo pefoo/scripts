@@ -6,6 +6,12 @@
 
 pdflatex -file-line-error -interaction nonstopmode $@ | grep $1':[0-9]*\|File ended while\|LaTeX Warning\|no line here to end\|specifier changed\|Undefined' | tee buildErrors
 
+if grep -Fq 'Rerun to get cross-references right.' buildErrors
+then
+	echo 'Rerunning to get cross-references right.'
+	pdflatex -file-line-error -interaction nonstopmode $@ | grep $1':[0-9]*\|File ended while\|LaTeX Warning\|no line here to end\|specifier changed\|Undefined' | tee buildErrors
+fi
+
 cp $(echo $1 | sed s/tex/pdf/g) ../
 if [[ -s buildErrors ]] 
 then

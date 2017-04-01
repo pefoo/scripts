@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=x11 VNC
+Comment=
+Exec=x11vnc -xkb -forever -noxrecord -noxfixes -noxdamage -display :0 -auth /var/run/lightdm/root/:0 -usepw
+Terminal=false
+Type=Application

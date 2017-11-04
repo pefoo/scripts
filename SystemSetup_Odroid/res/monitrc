@@ -304,4 +304,4 @@ stop program "/bin/systemctl stop sshd.service"
 
 check file auth.log with path /var/log/auth.log
  ignore match ".* sshd.* Accepted password for .* from 192\.168.* port .*"
- if match ".* sshd.* Accepted password for .* from .* port .*" then alert
+ if match ".* sshd.* Accepted \w+ for .* from .* port .*" then alert

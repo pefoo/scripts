@@ -20,6 +20,6 @@ git clone https://github.com/morhetz/gruvbox.git ~/.vim/pack/default/start/gruvb
 #
 # airline
 #
-git clone https://github.com/morhetz/gruvbox.git ~/.vim/pack/default/start/gruvbox
+git clone https://github.com/vim-airline/vim-airline ~/.vim/pack/dist/start/vim-airline
 
 

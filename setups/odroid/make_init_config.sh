@@ -5,18 +5,23 @@
 
 # History:
 # 01.04.2017: Created script to configure openssh, monit, nfs, x11vnc, bashrc, vimrc
+# 01.09.2018: Removed vnc
+
+# THIS IS OUTDATED AS FUCK. 
+# todo:
+# 	- checkout configs git repo
+#		- get config files from git repo 
 
 
 all=false
 openssh=false
 monit=false
 nfs=false
-x11vnc=false
 bashrc=false
 vimrc=false
 
 # parse arguments
-while getopts "asmnxbvh" option
+while getopts "asmnbvh" option
 do 
 	case $option in
 		a)
@@ -31,9 +36,6 @@ do
 		n)
 			nfs=true
 			;;
-		x)
-			x11vnc=true
-			;;
 		b)
 			bashrc=true
 			;;
@@ -45,7 +47,6 @@ do
 			echo -e "-s \t openssh server"
 			echo -e "-m \t monit"
 			echo -e "-n \t nfs"
-			echo -e "-x \t x11vnc"
 			echo -e "-b \t bashrc"
 			echo -e "-v \t vimrc"
 			echo -e "-h \t display help"
@@ -57,7 +58,6 @@ do
 			echo -e "-s \t openssh server"
 			echo -e "-m \t monit"
 			echo -e "-n \t nfs"
-			echo -e "-x \t x11vnc"
 			echo -e "-b \t bashrc"
 			echo -e "-v \t vimrc"
 			echo -e "-h \t display help"
@@ -107,25 +107,6 @@ if $nfs || $all; then
 		mount $hwa /home/$user/Intenso 
 		echo "LABEL=Intenso /home/$user/Intenso ntfs defaults 0 0" >> /etc/fstab
 		echo "home/$user/Intenso 192.168.178.0/255.255.255.0(rw,async)" >> /etc/exports
-	fi
-fi
-
-
-####################################
-# x11vnc
-####################################
-#TODO: Check whether this actuall works
-if $x11vnc || $all; then
-	echo "Setting up x11vnc server"
-	read -s -p "Enter your new x11vnc server password: " pwFirst
-	echo ""
-	read -s -p "Reenter the same password to verify: " pwSecond
-	echo ""
-	if [ "$pwFirst" == "$pwSecond" ];then
-		cp ./res/x11vnc.desktop /etc/xdg/autostart
-		x11vnc -storepasswd $pwFirst /etc/x11vnc.pass
-	else
-		echo -e "\t Your passwords did not match. Try again after the script finished the setup. To run only x11vnc setup use the -x switch"
 	fi
 fi
 

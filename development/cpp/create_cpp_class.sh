@@ -28,7 +28,7 @@ mkdir -p "$source_dir"
 
 # source file
 cat << EOF > "$source_file"
-#include "${file_name_base}.h"
+#include "${file_name_base}.hpp"
 EOF
 
 

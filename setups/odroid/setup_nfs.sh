@@ -1,9 +1,8 @@
 #/bin/bash
 
-if [ "$EUID" -ne 0 ]; then 
-  echo "Please run as root"
-  exit 1
-fi
+source ../../snippets/assert_run_as_root.sh
+
+assert_run_as_root
 
 read -p "Enter the user name to setup the drive for: " user
 if [ -z "user" ];then

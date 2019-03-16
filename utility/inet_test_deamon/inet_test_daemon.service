@@ -1,0 +1,9 @@
+[Unit]
+Description=A daemon to test internet connectivity
+
+[Service]
+ExecStart=/usr/bin/internet_connect_test.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

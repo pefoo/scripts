@@ -7,9 +7,11 @@
 
 SERVER="google.com"
 PORT="443"
-LOGFILEBASE="/var/log/"
+LOGFILEBASE="/var/log/internet_connection"
 TIMEFORMAT="+%Y-%m-%d %H:%M:%S"
 DELAY=300
+
+mkdir -p "$(LOGFILEBASE)"
 
 while true; do
 	LOGFILE="$LOGFILEBASE$(date "+%Y-%m-%d")"

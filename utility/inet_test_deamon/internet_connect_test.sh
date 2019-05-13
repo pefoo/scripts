@@ -7,7 +7,7 @@
 
 SERVER="google.com"
 PORT="443"
-LOGFILEBASE="/var/log/internet_connection"
+LOGFILEBASE="/var/log/internet_connection/"
 TIMEFORMAT="+%Y-%m-%d %H:%M:%S"
 DELAY=300
 

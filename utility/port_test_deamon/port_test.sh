@@ -7,7 +7,7 @@
 
 SERVER="markusgruber.ddns.net"
 PORT="22"
-LOGFILEBASE="/var/log/ssh_server_availability"
+LOGFILEBASE="/var/log/ssh_server_availability/"
 TIMEFORMAT="+%Y-%m-%d %H:%M:%S"
 DELAY=300
 

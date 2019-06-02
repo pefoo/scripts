@@ -7,11 +7,14 @@
 
 SERVER="google.com"
 PORT="443"
-LOGFILE="/var/log/inet_connectivity"
+LOGFILEBASE="/var/log/internet_connection/"
 TIMEFORMAT="+%Y-%m-%d %H:%M:%S"
 DELAY=300
 
+mkdir -p "$LOGFILEBASE"
+
 while true; do
+	LOGFILE="$LOGFILEBASE$(date "+%Y-%m-%d")"
   if nc -zw1 "$SERVER" "$PORT";then
     echo "$(date "$TIMEFORMAT") 1" >> "$LOGFILE"
   else

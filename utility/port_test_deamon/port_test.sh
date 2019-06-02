@@ -7,11 +7,14 @@
 
 SERVER="markusgruber.ddns.net"
 PORT="22"
-LOGFILE="/var/log/ssh_port_open"
+LOGFILEBASE="/var/log/ssh_server_availability/"
 TIMEFORMAT="+%Y-%m-%d %H:%M:%S"
 DELAY=300
 
+mkdir -p "$LOGFILEBASE"
+
 while true; do
+	LOGFILE="$LOGFILEBASE$(date "+%Y-%m-%d")"
   if nc -zw 5 "$SERVER" "$PORT";then
     echo "$(date "$TIMEFORMAT") 1" >> "$LOGFILE"
   else

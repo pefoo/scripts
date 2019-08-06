@@ -1,12 +1,8 @@
 #!/bin/bash
 
-source ../../snippets/assert_run_as_root.sh
-assert_run_as_root
-
 function log_console {
   echo -e "\e[93m${1}\e[39m"
 }
-
 
 applications="
   tmux
@@ -18,7 +14,7 @@ sudo apt install -y $applications
 
 if [ ! -d "/home/${USER}/configs" ];then 
   log_console "Configs folder /home/${USER}/configs not found - getting the repository"
-  git clone https://peepe@bitbucket.org/peepe/configs.git
+  git clone https://peepe@bitbucket.org/peepe/configs.git ~/configs
 fi
 
 log_console "Setting up dot files"

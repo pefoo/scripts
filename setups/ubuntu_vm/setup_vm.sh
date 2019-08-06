@@ -15,7 +15,7 @@ sudo apt install -y $applications
 log_console "Installing vim plugins"
 source "../../vim/install_plugins.sh"
 
-if [ ! -d "/home/${USER}/configs" ];then 
+if [ ! -d "/home/${USER}/configs" ]; then 
   log_console "Configs folder /home/${USER}/configs not found - getting the repository"
   git clone https://peepe@bitbucket.org/peepe/configs.git ~/configs
 fi
@@ -32,3 +32,8 @@ for file in "${!dot_files[@]}";do
   cp $file ${dot_files[$file]}
 done
 
+log_console "Setting console completion to case insesitive"
+if [ ! -a ~/.inputrc ]; then 
+  echo '$include /etc/inputrc' > ~/.inputrc; 
+fi
+echo 'set completion-ignore-case On' >> ~/.inputrc

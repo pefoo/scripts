@@ -12,6 +12,9 @@ applications="
 log_console "Installing applications $applications"
 sudo apt install -y $applications
 
+log_console "Installing vim plugins"
+source "../../vim/install_plugins.sh"
+
 if [ ! -d "/home/${USER}/configs" ];then 
   log_console "Configs folder /home/${USER}/configs not found - getting the repository"
   git clone https://peepe@bitbucket.org/peepe/configs.git ~/configs

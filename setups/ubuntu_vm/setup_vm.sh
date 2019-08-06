@@ -29,7 +29,10 @@ declare -A dot_files=(
 )
 for file in "${!dot_files[@]}";do
   log_console "Installing $file to ${dot_files[$file]}"
-  cp $file ${dot_files[$file]}
+  if [ -f "${dot_files[$file]}" ]; then
+  mv "${dot_files[$file]}" "${dot_files[$file]}.bak"
+  fi
+  cp "$file" "${dot_files[$file]}"
 done
 
 log_console "Setting console completion to case insesitive"

@@ -13,7 +13,7 @@ while getopts "i" opt; do
   esac
 done 
 
-# Log the console (yellow)
+# Log to console (yellow)
 function log_console {
   echo -e "\e[93m${1}\e[39m"
 }

@@ -49,6 +49,10 @@ declare -A dot_files=(
 if [ ! -d "$config_dir" ]; then 
   log_console "Configs folder $config_dir not found - getting the repository"
   git clone https://peepe@bitbucket.org/peepe/configs.git "$config_dir"
+else 
+  pushd "$config_dir"
+  git pull 
+  popd
 fi
 
 make_gitconfig_local 

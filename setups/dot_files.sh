@@ -15,6 +15,7 @@ declare -A dot_files=(
   [${config_dir}/apps/tmux/tmux.conf]="/home/${USER}/.tmux.conf"
   [${config_dir}/apps/vim/vimrc_tower]="/home/${USER}/.vimrc"
   [${config_dir}/system/inputrc]="/home/${USER}/.inputrc"
+  [${config_dir}/apps/git/gitconfig]="/home/${USER}/.gitconfig"
 )
 
 if [ ! -d "$config_dir" ]; then 

@@ -11,7 +11,7 @@ function log_dot_file {
 # Dot files to link
 config_dir="/home/${USER}/configs"
 declare -A dot_files=(
-  [${config_dir}/system/bashrc_tower]="/home/${USER}/.bashrc"
+  [${config_dir}/system/bashrc]="/home/${USER}/.bashrc"
   [${config_dir}/apps/tmux/tmux.conf]="/home/${USER}/.tmux.conf"
   [${config_dir}/apps/vim/vimrc_tower]="/home/${USER}/.vimrc"
   [${config_dir}/system/inputrc]="/home/${USER}/.inputrc"

@@ -15,9 +15,9 @@ function log_dot_file {
 # Create local git user config (contains user name and mail)
 function make_gitconfig_local {
   local guser gmail
-  echo -n "Enter your git user name: "
+  echo -en "\e[92mEnter your git user name:\e[39m "
   read guser
-  echo -n "Enter your git email: "
+  echo -en "\e[92mEnter your git email:\e[39m "
   read gmail
 
   local gc_local="/home/${USER}/.gitconfig.local"
@@ -60,8 +60,13 @@ make_gitconfig_local
 log_console "Setting up dot files"
 for file in "${!dot_files[@]}";do
   log_dot_file $file ${dot_files[$file]}
-  if [ -f "${dot_files[$file]}" ]; then
+  # If the dot file exists and is no symlink, create a backup
+  if [ -f "${dot_files[$file]}" -a ! -L "${dot_files[$file]}" ]; then
     mv "${dot_files[$file]}" "${dot_files[$file]}.bak"
+  fi
+  # If the dot file exists and IS a symlink, remove it first 
+  if [ -L "${dot_files[$file]}" ]; then
+    rm "${dot_files[$file]}"
   fi
   ln -s "$file" "${dot_files[$file]}"
 done

@@ -19,8 +19,3 @@ source "../../vim/install_plugins.sh"
 
 source ../dot_files.sh
 
-log_console "Setting console completion to case insesitive"
-if [ ! -a ~/.inputrc ]; then 
-  echo '$include /etc/inputrc' > ~/.inputrc; 
-fi
-echo 'set completion-ignore-case On' >> ~/.inputrc

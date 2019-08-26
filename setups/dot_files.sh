@@ -4,12 +4,13 @@ function log_console {
   echo -e "\e[93m${1}\e[39m"
 }
 
-# Dot files to copy 
+# Dot files to link
 config_dir="/home/${USER}/configs"
 declare -A dot_files=(
   [${config_dir}/system/bashrc_tower]="/home/${USER}/.bashrc"
   [${config_dir}/apps/tmux/tmux.conf]="/home/${USER}/.tmux.conf"
   [${config_dir}/apps/vim/vimrc_tower]="/home/${USER}/.vimrc"
+  [${config_dir}/system/inputrc]="/home/${USER}/.inputrc"
 )
 
 if [ ! -d "$config_dir" ]; then 

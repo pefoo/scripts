@@ -29,6 +29,7 @@ function log_dot_file {
 function prompt_git_pw {
   echo -en "\e[92mEnter your git user password:\e[39m "
   read -s gpwd
+  echo ""
 }
 
 # Create local git user config (contains user name and mail)
@@ -62,7 +63,7 @@ function link_dot_files {
     git clone https://peepe:"$gpwd"@bitbucket.org/peepe/configs.git "$config_dir"
   else 
     pushd "$config_dir"
-    git pull https://peepe:"$gpwd"@bitbucket.org/peepe/configs.git "$config_dir"
+    git pull https://peepe:$gpwd@bitbucket.org/peepe/configs.git
     popd
   fi
 
@@ -92,6 +93,7 @@ declare -A dot_files=(
 )
 
 if [ ! "$include_only" ]; then
+  prompt_git_pw
   make_gitconfig_local 
   link_dot_files
 fi

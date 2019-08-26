@@ -3,6 +3,7 @@
 #
 # Link dot files. 
 # This script gets or updates my configs repository and creates symlink to the dotfiles inside that repository. 
+# The local git configuration is added as well (user is prompted to enter user name and email for git)
 #
 
 while getopts "i" opt; do

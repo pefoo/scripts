@@ -4,6 +4,10 @@ function log_console {
   echo -e "\e[93m${1}\e[39m"
 }
 
+function log_dot_file {
+  printf "\e[92m%-50s %2s %s\e[39m\n" "${1}" "->" "${2}"
+}
+
 # Dot files to link
 config_dir="/home/${USER}/configs"
 declare -A dot_files=(
@@ -20,7 +24,7 @@ fi
 
 log_console "Setting up dot files"
 for file in "${!dot_files[@]}";do
-  log_console "Installing $file to ${dot_files[$file]}"
+  log_dot_file $file ${dot_files[$file]}
   if [ -f "${dot_files[$file]}" ]; then
     mv "${dot_files[$file]}" "${dot_files[$file]}.bak"
   fi

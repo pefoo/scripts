@@ -1,7 +1,6 @@
 #/bin/bash
 
 source ../../snippets/assert_run_as_root.sh
-
 assert_run_as_root
 
 read -p "Enter the user name to setup the drive for: " user

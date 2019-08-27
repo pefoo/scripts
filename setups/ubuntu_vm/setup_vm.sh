@@ -12,7 +12,7 @@ source "$this_path/../../functions/log.sh"
 
 # update applications
 sudo apt update
-sudo apt -y upgrade 
+sudo apt upgrade -y
 
 # applications to install 
 applications="

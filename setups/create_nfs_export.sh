@@ -2,6 +2,8 @@
 
 #
 # Export a drive as nfs share 
+# This script takes a drive label and creates a nfs export for this drive. 
+# The drive is remounted using a new mount point. The new mount point is added to the fstab. 
 #
 
 source ../functions/assert_run_as_root.sh
@@ -39,7 +41,7 @@ if [ -z "$user" ];then
 fi 
 
 # Check if the drive actually exists 
-found=$(blkid | grep "$drive_name")
+found=$(blkid | grep "LABEL=\"$drive_name\"")
 if [ ! -n "$found" ]; then
   log_error "The drive $drive_name was not found! Run blkid to get a list of known drives."
   exit 1

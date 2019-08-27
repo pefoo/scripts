@@ -6,8 +6,9 @@
 # The drive is remounted using a new mount point. The new mount point is added to the fstab. 
 #
 
-source ../functions/assert_run_as_root.sh
-source ../functions/log.sh
+this_path=$(dirname $(realpath $0))
+source "$this_path/../functions/assert_run_as_root.sh"
+source "$this_path/../functions/log.sh"
 assert_run_as_root
 
 function usage {

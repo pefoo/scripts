@@ -46,7 +46,7 @@ if [ ! -n "$found" ]; then
 fi
 
 # Use positive lookbehind / lookahead perl regex to get the drive type
-type=$($found | grep -oP '(?<=TYPE=").*(?=")')
+type=$(echo $found | grep -oP '(?<=TYPE=")[\w\d]+(?=")')
 if [ -z "$type" ];then 
   log_error "Failed to identify the drive type!"
   exit 1
@@ -60,7 +60,6 @@ if [ -d $mount_point ];then
 fi
 log_msg "Creating new directory to mount the drive: $mount_point"
 mkdir -p $mount_point
-chown "$user" "$mount_point"
 
 # Unmount the drive it is mounted already 
 hwa=$(sed 's/: .*//g' <<<$found)
@@ -69,6 +68,7 @@ if grep -qs "$hwa" /proc/mounts; then
 fi
 # Mount it using the new mount point 
 mount "$hwa" "$mount_point"
+chown "$user" "$mount_point"
 
 # Setup fstab 
 log_msg "Adding the new drive to fstab. A backup is available under /etc/fstab.bak"

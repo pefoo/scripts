@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #
-# Fresh odroid setup (yet untested)
+# Fresh odroid setup
 #   - update / install apps 
 #   - setup Intenso nfs export 
 #
@@ -23,6 +23,6 @@ log_msg "Installing software: $software"
 apt-get -y -qq install $software
 
 # Setup nfs
-sh "$this_path/../create_ngs_export.sh Intenso"
+$this_path/../create_nfs_export.sh Intenso
 
 

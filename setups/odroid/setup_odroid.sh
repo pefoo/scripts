@@ -25,4 +25,12 @@ apt-get -y -qq install $software
 # Setup nfs
 $this_path/../create_nfs_export.sh Intenso
 
+log_msg "Installing vim plugins"
+source "$this_path/../install_vim_plugins.sh"
 
+# Link dot files, if the config directory exists
+if [ -d "$HOME/configs" ];then
+  source $HOME/configs/dotfiles/link_dotfiles.sh -b "$HOME/configs/dotfiles"
+else 
+  log_warn "Failed to find the configs directory. Skipping dot file configurations." 
+fi

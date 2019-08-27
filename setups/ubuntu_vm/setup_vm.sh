@@ -20,7 +20,7 @@ fi
 
 # update applications
 sudo apt update
-sudo apt upgrade 
+sudo apt -y upgrade 
 
 # applications to install 
 applications="

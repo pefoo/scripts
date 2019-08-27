@@ -7,7 +7,8 @@
 #   - link dot files 
 #
 
-source ../../functions/log.sh
+this_path=$(dirname $(realpath $0))
+source "$this_path/../../functions/log.sh"
 
 # update applications
 sudo apt update

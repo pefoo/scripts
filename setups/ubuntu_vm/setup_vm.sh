@@ -7,9 +7,7 @@
 #   - link dot files 
 #
 
-function log_console {
-  echo -e "\e[93m${1}\e[39m"
-}
+source ../../functions/log.sh
 
 # update applications
 sudo apt update
@@ -22,17 +20,17 @@ applications="
   git
 "
 
-log_console "Installing applications $applications"
+log_msg "Installing applications $applications"
 sudo apt install -y $applications
 
-log_console "Installing vim plugins"
+log_msg "Installing vim plugins"
 source "../../vim/install_plugins.sh"
 
 # Link dot files, if the config directory exists
 if [ -d "$HOME/configs" ];then
   source $HOME/configs/dotfiles/link_dotfiles.sh -b "$HOME/configs/dotfiles"
 else 
-  log_console "Failed to find the configs directory. Skipping dot file configurations." 
+  log_warn "Failed to find the configs directory. Skipping dot file configurations." 
 fi
 
 

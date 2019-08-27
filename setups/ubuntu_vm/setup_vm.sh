@@ -25,7 +25,7 @@ log_msg "Installing applications $applications"
 sudo apt install -y $applications
 
 log_msg "Installing vim plugins"
-source "../install_plugins.sh"
+source "$this_path/../install_vim_plugins.sh"
 
 # Link dot files, if the config directory exists
 if [ -d "$HOME/configs" ];then

@@ -7,6 +7,8 @@
 #
 # For more information about gnome shell extensions and their installation visit http://www.bernaerts-nicolas.fr/linux/76-gnome/345-gnome-shell-install-remove-extension-command-line-script
 #
+# Once installed, restart the gnome shell (alt-f2 -> r). The new extensions will appear in gnome tweak tools
+#
 
 readonly EXTENSION_SITE="https://extensions.gnome.org"
 readonly EXTENSION_FOLDER="$HOME/.local/share/gnome-shell/extensions"
@@ -31,6 +33,10 @@ declare -Ar EXTENSIONS=(
   # https://extensions.gnome.org/extension/120/system-monitor/
   [system_monitor]=120
 )
+
+# Install extension prerequisites 
+log_msg "Installing extension prerequisites"
+sudo apt install -y -qq gir1.2-gtop-2.0 gir1.2-networkmanager-1.0 gir1.2-clutter-1.0
 
 # Get gnome shell version 
 readonly GNOME_VERSION=$(gnome-shell --version | grep -oP '\d\.\d{2}')

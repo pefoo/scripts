@@ -28,8 +28,8 @@ declare -Ar EXTENSIONS=(
   [workspace_grid]=484
   # https://extensions.gnome.org/extension/1066/fix-multi-monitors/
   [multi_monitor_fix]=1066
-  # https://extensions.gnome.org/extension/1064/system-monitor/
-  [system_monitor]=1064
+  # https://extensions.gnome.org/extension/120/system-monitor/
+  [system_monitor]=120
 )
 
 # Get gnome shell version 

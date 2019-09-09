@@ -18,7 +18,7 @@ apt-get -qq update
 apt-get -qq -y upgrade
 
 # Install software 
-software="openssh-server monit nfs-kernel-server ntfs-3g vim"
+software="openssh-server monit nfs-kernel-server ntfs-3g vim fail2ban"
 log_msg "Installing software: $software"
 apt-get -y -qq install $software
 
@@ -34,3 +34,5 @@ if [ -d "$HOME/configs" ];then
 else 
   log_warn "Failed to find the configs directory. Skipping dot file configurations." 
 fi
+
+log_warn "Setup done. Make sure to setup monit and fail2ban!"

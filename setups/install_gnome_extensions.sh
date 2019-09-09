@@ -9,7 +9,7 @@
 #
 
 readonly EXTENSION_SITE="https://extensions.gnome.org"
-readonly EXTENSION_FOLDER="$HOME/tmp" #"$HOME/.local/share/gnome-shell/extensions"
+readonly EXTENSION_FOLDER="$HOME/.local/share/gnome-shell/extensions"
 
 readonly THIS_PATH=$(dirname $(realpath $0))
 source "$THIS_PATH/../functions/log.sh"

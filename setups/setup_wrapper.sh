@@ -15,7 +15,7 @@ title=black,
 window=,lightgray
 border=lightgray,black
 textbox=black,
-button=black,white
+button=white,gray
 listbox=black,lightgray
 checkbox=black,lightgray
 actcheckbox=white,gray
@@ -29,6 +29,17 @@ sellistbox=red,gray
 #
 function pause() {
   read -p 'Press [Enter] to continue'
+}
+
+function get_user() {
+  local user=$SUDO_USER
+  if [ -z "$user" ];then 
+    clear 
+    log_error "Failed to get the invoking user name. Gnome extensions are installed local."
+    pause
+    exit 1
+  fi
+  echo "$user"
 }
 
 #
@@ -77,15 +88,10 @@ function mi_install_packages() {
 # Provide a list of common extensions and install the selected ones
 #
 function mi_install_gnome_extensions() {
-  user=$SUDO_USER
-  if [ -z "$user" ];then 
-    clear 
-    log_error "Failed to get the invoking user name. Gnome extensions are installed local."
-    pause
-    return 1
-  fi
+  user=$(get_user)
 
   # Run the gnome extension management in a subshell that is owned by the actual user (not root)
+  # current path and the whiptail color scheme is passed to the subshell 
   sudo -H -u "$user" bash -c '
     source "$0/install_gnome_extensions.sh" -i
     export NEWT_COLORS="$1"
@@ -119,7 +125,13 @@ function mi_install_gnome_extensions() {
 # Implementation of the install vim plugins menu item 
 #
 function mi_install_vim_plugins() {
-TO BE DONE 
+  user=$(get_user)
+
+  sudo -H -u "$user" bash -c '
+    clear
+    source "$0/install_vim_plugins.sh"
+  ' "$THIS_PATH"
+  pause
 }
 
 #
@@ -145,6 +157,8 @@ while true; do
     25 100 16 "${menu_items[@]}" 3>&1 1>&2 2>&3)
   ret=$?
 
+  # 1 -> closed using exit 
+  # 255 -> closed using esc (even though the doc states something else)
   if [ "$ret" -eq 1 ] || [ "$ret" -eq 255 ];then 
     exit 0
   fi

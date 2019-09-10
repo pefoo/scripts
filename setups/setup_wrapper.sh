@@ -1,12 +1,28 @@
 #!/bin/bash
 
 #
-# TO BE DONE 
+# This is a wrapper script for several setup / utility scripts that provides
+# basic functionality behind a minimal UI 
 #
 
 readonly THIS_PATH=$(dirname $(realpath $0))
 source "$THIS_PATH/../functions/log.sh"
 source "$THIS_PATH/../functions/assert_run_as_root.sh"
+
+export NEWT_COLORS="
+root=,gray
+title=black,
+window=,lightgray
+border=lightgray,black
+textbox=black,
+button=black,white
+listbox=black,lightgray
+checkbox=black,lightgray
+actcheckbox=white,gray
+actlistbox=white,gray
+actsellistbox=white,gray
+sellistbox=red,gray
+"
 
 #
 # Press enter to continue
@@ -72,6 +88,7 @@ function mi_install_gnome_extensions() {
   # Run the gnome extension management in a subshell that is owned by the actual user (not root)
   sudo -H -u "$user" bash -c '
     source "$0/install_gnome_extensions.sh" -i
+    export NEWT_COLORS="$1"
 
     # Build the menu using the extensions provided by the script 
     c=0
@@ -86,7 +103,6 @@ function mi_install_gnome_extensions() {
       "${items[@]}" \
       3>&1 1>&2 2>&3)
 
-    echo "Selection: $selection"
     # Cancel 
     [ "$?" -eq 1 ] && exit 0
     # Nothing was selected 
@@ -95,9 +111,22 @@ function mi_install_gnome_extensions() {
     clear 
     install_prerequisites
     install_extensions $(echo "$selection" | tr -d "\"")
-
-  ' "$THIS_PATH"
+  ' "$THIS_PATH" "$NEWT_COLORS"
   pause
+}
+
+#
+# Implementation of the install vim plugins menu item 
+#
+function mi_install_vim_plugins() {
+TO BE DONE 
+}
+
+#
+# Implementation of the setup dot files menu item 
+#
+function mi_setup_dot_files() {
+TO BE DONE
 }
 
 assert_run_as_root
@@ -109,14 +138,17 @@ while true; do
   menu_items[0]="1"; menu_items[1]="Update packages"
   menu_items[2]="2"; menu_items[3]="Install packages"
   menu_items[4]="3"; menu_items[5]="Install gnome extensions"
+  menu_items[6]="4"; menu_items[7]="Install vim plugins"
+  menu_items[8]="5"; menu_items[9]="Setup dot files"
 
   selection=$(whiptail --title "System setup" --menu "Main menu" --cancel-button "Exit" \
     25 100 16 "${menu_items[@]}" 3>&1 1>&2 2>&3)
   ret=$?
 
-  if [ "$ret" -eq 1 ];then 
+  if [ "$ret" -eq 1 ] || [ "$ret" -eq 255 ];then 
     exit 0
   fi
+
   
   case "$selection" in
     "1")
@@ -127,6 +159,12 @@ while true; do
       ;;
     "3")
       mi_install_gnome_extensions
+      ;;
+    "4")
+      mi_install_vim_plugins
+      ;;
+    "5")
+      mi_setup_dot_files
       ;;
     *)
       clear

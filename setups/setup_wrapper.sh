@@ -4,10 +4,14 @@
 # This is a wrapper script for several setup / utility scripts that provides
 # basic functionality behind a minimal UI 
 #
+# Certain functionality is executed as the invoking user (not root). Therefore, a new subshell, started as the user, is used.
+# Signal a process abort (esc key press or cancel button press) in a subshell by returning 1 from it.
+#
 
 readonly THIS_PATH=$(dirname $(realpath $0))
 source "$THIS_PATH/../functions/log.sh"
 source "$THIS_PATH/../functions/assert_run_as_root.sh"
+assert_run_as_root
 
 export NEWT_COLORS="
 root=,gray
@@ -26,12 +30,36 @@ entry=white,gray
 "
 
 #
+# Execute command if the return codes indicates a canceled whiptail dialog
+# Args
+#   *) The command to execute 
+#
+function if_cancel() {
+  ret="$?"
+  [ "$ret" -eq 1 ] || [ "$ret" -eq 255 ] && eval "$@"
+}
+
+#
+# Execute command if the return codes indicates a not canceled whiptail dialog
+# Args
+#   *) The command to execute 
+#
+function if_not_cancel() {
+  ret="$?"
+  [ "$ret" -ne 1 ] && [ "$ret" -ne 255 ] && eval "$@"
+
+}
+
+#
 # Press enter to continue
 #
 function pause() {
   read -p 'Press [Enter] to continue'
 }
 
+#
+# Get the user name that called this script 
+#
 function get_user() {
   local user=$SUDO_USER
   if [ -z "$user" ];then 
@@ -42,6 +70,7 @@ function get_user() {
   fi
   echo "$user"
 }
+
 
 #
 # Implementation of Update packages menu item 
@@ -73,7 +102,7 @@ function mi_install_packages() {
     3>&1 1>&2 2>&3)
 
   # Cancel 
-  [ "$?" -eq 1 ] && return 0
+  if_cancel return 0
   # Nothing was selected 
   [ -z "$selection" ] && return 0
 
@@ -96,6 +125,7 @@ function mi_install_gnome_extensions() {
   sudo -H -u "$user" bash -c '
     source "$0/install_gnome_extensions.sh" -i
     export NEWT_COLORS="$1"
+    eval "$2"
 
     # Build the menu using the extensions provided by the script 
     c=0
@@ -111,15 +141,15 @@ function mi_install_gnome_extensions() {
       3>&1 1>&2 2>&3)
 
     # Cancel 
-    [ "$?" -eq 1 ] && exit 0
+    if_cancel exit 1
     # Nothing was selected 
-    [ -z "$selection" ] && exit 0
+    [ -z "$selection" ] && exit 1
 
     clear 
     install_prerequisites
     install_extensions $(echo "$selection" | tr -d "\"")
-  ' "$THIS_PATH" "$NEWT_COLORS"
-  pause
+  ' "$THIS_PATH" "$NEWT_COLORS" "$(declare -f if_cancel)"
+  if_not_cancel pause
 }
 
 #
@@ -132,6 +162,8 @@ function mi_install_vim_plugins() {
     clear
     source "$0/install_vim_plugins.sh" -i
     export NEWT_COLORS="$1"
+    eval "$2"
+
     c=0
     for plugin in "${!PLUGINS[@]}"; do
       items[$(((c++)))]="$plugin"
@@ -144,17 +176,17 @@ function mi_install_vim_plugins() {
       3>&1 1>&2 2>&3)
 
     # Cancel 
-    [ "$?" -eq 1 ] && exit 0
+    if_cancel exit 1
     # Nothing was selected 
-    [ -z "$selection" ] && exit 0
+    [ -z "$selection" ] && exit 1
 
     clear 
     for s in $selection; do
       plugin=$(echo "$s" | tr -d "\"")
       install_plugin "$plugin" "${PLUGINS[$plugin]}"
     done
-  ' "$THIS_PATH" "$NEWT_COLORS"
-  pause
+  ' "$THIS_PATH" "$NEWT_COLORS" "$(declare -f if_cancel)"
+  if_not_cancel pause
 }
 
 #
@@ -165,6 +197,8 @@ function mi_setup_dot_files() {
   sudo -H -u "$user" bash -c '
     source "$0/../functions/log.sh"
     export NEWT_COLORS="$1"
+    eval "$2"
+
     readonly CONFIGS_DIR="$HOME/configs"
     readonly LINKER_SCRIPT="${CONFIGS_DIR}/dotfiles/link_dotfiles.sh"
 
@@ -176,15 +210,13 @@ function mi_setup_dot_files() {
     if [ ! -f "$LINKER_SCRIPT" ]; then 
       log_error "The dot file linker script is missing. \
         Make sure to checkout the configs repository and check that the linker script is located in $LINKER_SCRIPT"
-      exit 1
+      exit 2
     fi 
 
     git_user=$(whiptail --inputbox "Please enter your git user name." 8 78 "$USER" \
       --title "Setup dot files" 3>&1 1>&2 2>&3)
-    ret=$?
-    if [ "$ret" -eq 1 ] || [ "$ret" -eq 255 ];then 
-      exit 0
-    fi
+
+    if_cancel exit 1
     if [ -z "$git_user" ];then 
       log_error "Empty user name is not allowed"
       exit 1
@@ -192,18 +224,13 @@ function mi_setup_dot_files() {
 
     git_mail=$(whiptail --inputbox "Please enter your git email." 8 78 \
       --title "Setup dot files" 3>&1 1>&2 2>&3)
-    ret=$?
-    if [ "$ret" -eq 1 ] || [ "$ret" -eq 255 ];then 
-      exit 0
-    fi
+    if_cancel exit 1
 
     source "$LINKER_SCRIPT" -b "$CONFIGS_DIR/dotfiles" -u "$git_user" -m "$git_mail"
-  ' "$THIS_PATH" "$NEWT_COLORS"
-  pause
+  ' "$THIS_PATH" "$NEWT_COLORS" "$(declare -f if_cancel)"
+  if_not_cancel pause
 
 }
-
-assert_run_as_root
 
 #
 # Menu loop 
@@ -217,15 +244,9 @@ while true; do
 
   selection=$(whiptail --title "System setup" --menu "Main menu" --cancel-button "Exit" \
     25 100 16 "${menu_items[@]}" 3>&1 1>&2 2>&3)
-  ret=$?
 
-  # 1 -> closed using exit 
-  # 255 -> closed using esc (even though the doc states something else)
-  if [ "$ret" -eq 1 ] || [ "$ret" -eq 255 ];then 
-    exit 0
-  fi
+  if_cancel exit 0
 
-  
   case "$selection" in
     "1")
       mi_update_packages

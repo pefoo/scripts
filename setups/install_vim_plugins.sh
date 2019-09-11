@@ -36,6 +36,7 @@ function install_plugin() {
 
   if [ -z "$plugin" ] || [ -z "source_url" ]; then 
     log_error "Provide a plugin name and source url for the vim plugin you want to install"
+    return 1
   fi
 
   plugin_dir="${PLUGIN_BASE_DIR}/start/${plugin}"

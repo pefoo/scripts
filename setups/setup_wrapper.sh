@@ -129,8 +129,30 @@ function mi_install_vim_plugins() {
 
   sudo -H -u "$user" bash -c '
     clear
-    source "$0/install_vim_plugins.sh"
-  ' "$THIS_PATH"
+    source "$0/install_vim_plugins.sh" -i
+    export NEWT_COLORS="$1"
+    c=0
+    for plugin in "${!PLUGINS[@]}"; do
+      items[$(((c++)))]="$plugin"
+      items[$(((c++)))]=""
+      items[$(((c++)))]=ON
+    done
+    selection=$(whiptail --title "Select vim plugins to install" --checklist \
+      "Use space to select plugins" 25 100 16 \
+      "${items[@]}" \
+      3>&1 1>&2 2>&3)
+
+    # Cancel 
+    [ "$?" -eq 1 ] && exit 0
+    # Nothing was selected 
+    [ -z "$selection" ] && exit 0
+
+    clear 
+    for s in $selection; do
+      plugin=$(echo "$s" | tr -d "\"")
+      install_plugin "$plugin" "${PLUGINS[$plugin]}"
+    done
+  ' "$THIS_PATH" "$NEWT_COLORS"
   pause
 }
 

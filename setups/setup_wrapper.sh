@@ -22,6 +22,7 @@ actcheckbox=white,gray
 actlistbox=white,gray
 actsellistbox=white,gray
 sellistbox=red,gray
+entry=white,gray
 "
 
 #
@@ -58,7 +59,7 @@ function mi_update_packages() {
 # Provide a list of common packages and install the selected ones 
 #
 function mi_install_packages() {
-  selection=$(whiptail --title "Select common packages to install" --checklist \
+  local selection=$(whiptail --title "Select common packages to install" --checklist \
     "Use space to select packages" 25 100 16 \
     "vim"               "Good old vim"                ON \
     "tmux"              "Terminal multiplexer"        ON \
@@ -88,7 +89,7 @@ function mi_install_packages() {
 # Provide a list of common extensions and install the selected ones
 #
 function mi_install_gnome_extensions() {
-  user=$(get_user)
+  local user=$(get_user)
 
   # Run the gnome extension management in a subshell that is owned by the actual user (not root)
   # current path and the whiptail color scheme is passed to the subshell 
@@ -125,7 +126,7 @@ function mi_install_gnome_extensions() {
 # Implementation of the install vim plugins menu item 
 #
 function mi_install_vim_plugins() {
-  user=$(get_user)
+  local user=$(get_user)
 
   sudo -H -u "$user" bash -c '
     clear
@@ -160,7 +161,46 @@ function mi_install_vim_plugins() {
 # Implementation of the setup dot files menu item 
 #
 function mi_setup_dot_files() {
-TO BE DONE
+  local user=$(get_user)
+  sudo -H -u "$user" bash -c '
+    source "$0/../functions/log.sh"
+    export NEWT_COLORS="$1"
+    readonly CONFIGS_DIR="$HOME/configs"
+    readonly LINKER_SCRIPT="${CONFIGS_DIR}/dotfiles/link_dotfiles.sh"
+
+    if [ ! -d "$CONFIGS_DIR" ]; then 
+      log_msg "Cloning configuration repository to $CONFIGS_DIR"
+      git clone -q https://github.com/pefoo/configs.git "$CONFIGS_DIR"
+    fi
+    
+    if [ ! -f "$LINKER_SCRIPT" ]; then 
+      log_error "The dot file linker script is missing. \
+        Make sure to checkout the configs repository and check that the linker script is located in $LINKER_SCRIPT"
+      exit 1
+    fi 
+
+    git_user=$(whiptail --inputbox "Please enter your git user name." 8 78 "$USER" \
+      --title "Setup dot files" 3>&1 1>&2 2>&3)
+    ret=$?
+    if [ "$ret" -eq 1 ] || [ "$ret" -eq 255 ];then 
+      exit 0
+    fi
+    if [ -z "$git_user" ];then 
+      log_error "Empty user name is not allowed"
+      exit 1
+    fi
+
+    git_mail=$(whiptail --inputbox "Please enter your git email." 8 78 \
+      --title "Setup dot files" 3>&1 1>&2 2>&3)
+    ret=$?
+    if [ "$ret" -eq 1 ] || [ "$ret" -eq 255 ];then 
+      exit 0
+    fi
+
+    source "$LINKER_SCRIPT" -b "$CONFIGS_DIR/dotfiles" -u "$git_user" -m "$git_mail"
+  ' "$THIS_PATH" "$NEWT_COLORS"
+  pause
+
 }
 
 assert_run_as_root

@@ -30,23 +30,19 @@ entry=white,gray
 "
 
 #
-# Execute command if the return codes indicates a canceled whiptail dialog
-# Args
-#   *) The command to execute 
+# Check whether the last whiptail dialog was canceled 
 #
 function if_cancel() {
   ret="$?"
-  [ "$ret" -eq 1 ] || [ "$ret" -eq 255 ] && eval "$@"
+  [ "$ret" -eq 1 ] || [ "$ret" -eq 255 ]
 }
 
 #
-# Execute command if the return codes indicates a not canceled whiptail dialog
-# Args
-#   *) The command to execute 
+# Check whether the last whiptail dialog was not canceled 
 #
 function if_not_cancel() {
   ret="$?"
-  [ "$ret" -ne 1 ] && [ "$ret" -ne 255 ] && eval "$@"
+  [ "$ret" -ne 1 ] && [ "$ret" -ne 255 ]
 
 }
 
@@ -102,7 +98,7 @@ function mi_install_packages() {
     3>&1 1>&2 2>&3)
 
   # Cancel 
-  if_cancel return 0
+  if_cancel && return 1
   # Nothing was selected 
   [ -z "$selection" ] && return 0
 
@@ -141,7 +137,7 @@ function mi_install_gnome_extensions() {
       3>&1 1>&2 2>&3)
 
     # Cancel 
-    if_cancel exit 1
+    if_cancel && exit 1
     # Nothing was selected 
     [ -z "$selection" ] && exit 1
 
@@ -149,7 +145,7 @@ function mi_install_gnome_extensions() {
     install_prerequisites
     install_extensions $(echo "$selection" | tr -d "\"")
   ' "$THIS_PATH" "$NEWT_COLORS" "$(declare -f if_cancel)"
-  if_not_cancel pause
+  if_not_cancel && pause
 }
 
 #
@@ -176,7 +172,7 @@ function mi_install_vim_plugins() {
       3>&1 1>&2 2>&3)
 
     # Cancel 
-    if_cancel exit 1
+    if_cancel && exit 1
     # Nothing was selected 
     [ -z "$selection" ] && exit 1
 
@@ -186,7 +182,7 @@ function mi_install_vim_plugins() {
       install_plugin "$plugin" "${PLUGINS[$plugin]}"
     done
   ' "$THIS_PATH" "$NEWT_COLORS" "$(declare -f if_cancel)"
-  if_not_cancel pause
+  if_not_cancel && pause
 }
 
 #
@@ -216,7 +212,7 @@ function mi_setup_dot_files() {
     git_user=$(whiptail --inputbox "Please enter your git user name." 8 78 "$USER" \
       --title "Setup dot files" 3>&1 1>&2 2>&3)
 
-    if_cancel exit 1
+    if_cancel && exit 1
     if [ -z "$git_user" ];then 
       log_error "Empty user name is not allowed"
       exit 1
@@ -224,11 +220,11 @@ function mi_setup_dot_files() {
 
     git_mail=$(whiptail --inputbox "Please enter your git email." 8 78 \
       --title "Setup dot files" 3>&1 1>&2 2>&3)
-    if_cancel exit 1
+    if_cancel && exit 1
 
     source "$LINKER_SCRIPT" -b "$CONFIGS_DIR/dotfiles" -u "$git_user" -m "$git_mail"
   ' "$THIS_PATH" "$NEWT_COLORS" "$(declare -f if_cancel)"
-  if_not_cancel pause
+  if_not_cancel && pause
 
 }
 
@@ -243,9 +239,7 @@ function mi_mount_nfs_share() {
   HOST=$(whiptail --inputbox "Enter the server ip or hostname" 8 78 \
     --title "Mount nfs" 3>&1 1>&2 2>&3)
  
-  # using return in this function will not work, since it would only make the function return 1
-  # the empty command (:) is used as dummy and the return value of the functions comparison is used 
-  if_cancel : && return 1
+  if_cancel && return 1
   source "$THIS_PATH/mount_nfs_share.sh" -i
   
   clear
@@ -272,7 +266,7 @@ function mi_mount_nfs_share() {
     "${items[@]}" \
     3>&1 1>&2 2>&3)
 
-  if_cancel : && return 1
+  if_cancel && return 1
   clear 
 
   for s in $selection; do
@@ -285,7 +279,7 @@ function mi_mount_nfs_share() {
     local dir
     dir=$(whiptail --inputbox "Enter a path to mount $share"  8 78 "$default_dir"\
       --title "Mount nfs" 3>&1 1>&2 2>&3)
-    if_cancel : && continue
+    if_cancel && continue
     if ! mount_share "${HOST}:$share" "$dir"; then 
       continue
     fi
@@ -309,7 +303,7 @@ while true; do
   selection=$(whiptail --title "System setup" --menu "Main menu" --cancel-button "Exit" \
     25 100 16 "${menu_items[@]}" 3>&1 1>&2 2>&3)
 
-  if_cancel exit 0
+  if_cancel && exit 0
 
   case "$selection" in
     "1")

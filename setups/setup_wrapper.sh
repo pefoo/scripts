@@ -232,6 +232,10 @@ function mi_setup_dot_files() {
 
 }
 
+#
+# Implementation of the mount nfs share menu item 
+# Allows to mount one or more shares per host
+#
 function mi_mount_nfs_share() {
   local user=$(get_user)
   local -r HOST=$(whiptail --inputbox "Enter the server ip or hostname" 8 78 \

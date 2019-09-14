@@ -89,7 +89,7 @@ function mount_share() {
 #   1) The share to mount 
 #   2) The mount point 
 function update_fstab() {
-  log_msg "Updating fstab. Backups is available under /etc/fstab.bak"
+  log_msg "Updating fstab. Backup is available under /etc/fstab.bak"
   cp /etc/fstab /etc/fstab.bak
   echo "$1 $2 nfs rw,nofail 0 0" >> /etc/fstab
 }

@@ -272,8 +272,8 @@ function mi_mount_nfs_share() {
     local default_dir="/media/${user}/$(basename "$share")"
     local dir=$(whiptail --inputbox "Enter a path to mount $share"  8 78 "$default_dir"\
       --title "Mount nfs" 3>&1 1>&2 2>&3)
-    mount_share "$SHARE" "$DIR"
-    update_fstab "$SHARE" "$DIR"
+    mount_share "${HOST}:$share" "$dir"
+    update_fstab "${HOST}:$share" "$dir"
   done
 
   pause

@@ -232,6 +232,53 @@ function mi_setup_dot_files() {
 
 }
 
+function mi_mount_nfs_share() {
+  local user=$(get_user)
+  local -r HOST=$(whiptail --inputbox "Enter the server ip or hostname" 8 78 \
+    --title "Mount nfs" 3>&1 1>&2 2>&3)
+  source "$THIS_PATH/mount_nfs_share.sh" -i
+  
+  clear
+  prepare_client
+
+  if ! assert_server_running "$HOST";then 
+    pause
+    return 1
+  fi
+
+
+  local -r EXPORTS=$(get_exports "$HOST")
+  local c=0
+  while read -r export; do
+    items[$(((c++)))]=$(echo "$export" | grep -Po '^[^\s]+')
+    items[$(((c++)))]=""
+    items[$(((c++)))]=ON
+  done <<< "$EXPORTS"
+
+  local selection=$(whiptail --title "Select shares to mount" --checklist \
+    "Use space to select a share" 25 100 16 \
+    "${items[@]}" \
+    3>&1 1>&2 2>&3)
+
+  clear 
+
+  for s in $selection; do
+    local share=$(echo "$s" | tr -d "\"")
+    if ! check_not_mounted "${HOST}:${share}"; then 
+      pause
+      continue
+    fi
+
+    local default_dir="/media/${user}/$(basename "$share")"
+    local dir=$(whiptail --inputbox "Enter a path to mount $share"  8 78 "$default_dir"\
+      --title "Mount nfs" 3>&1 1>&2 2>&3)
+    mount_share "$SHARE" "$DIR"
+    update_fstab "$SHARE" "$DIR"
+  done
+
+  pause
+}
+
 #
 # Menu loop 
 #
@@ -241,6 +288,7 @@ while true; do
   menu_items[4]="3"; menu_items[5]="Install gnome extensions"
   menu_items[6]="4"; menu_items[7]="Install vim plugins"
   menu_items[8]="5"; menu_items[9]="Setup dot files"
+  menu_items[10]="6"; menu_items[11]="Mount nfs share"
 
   selection=$(whiptail --title "System setup" --menu "Main menu" --cancel-button "Exit" \
     25 100 16 "${menu_items[@]}" 3>&1 1>&2 2>&3)
@@ -262,6 +310,9 @@ while true; do
       ;;
     "5")
       mi_setup_dot_files
+      ;;
+    "6")
+      mi_mount_nfs_share
       ;;
     *)
       clear

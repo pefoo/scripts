@@ -249,6 +249,7 @@ function mi_mount_nfs_share() {
 
   local -r EXPORTS=$(get_exports "$HOST")
   local c=0
+  local -a items
   while read -r export; do
     items[$(((c++)))]=$(echo "$export" | grep -Po '^[^\s]+')
     items[$(((c++)))]=""

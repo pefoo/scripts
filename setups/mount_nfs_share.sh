@@ -122,7 +122,9 @@ if [ ! "$interactive_mode" == true ];then
     exit 1
   fi
 
-  mount_share "$SHARE" "$DIR"
+  if ! mount_share "$SHARE" "$DIR"; then 
+    exit 1
+  fi
   update_fstab "$SHARE" "$DIR"
 fi 
 

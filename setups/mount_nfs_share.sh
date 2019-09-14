@@ -21,7 +21,7 @@ source "$THIS_PATH/../functions/log.sh"
 source "$THIS_PATH/../functions/assert_run_as_root.sh"
 assert_run_as_root
 
-readonly NFS_PORT=2049
+[ -z "$NFS_PORT" ] && readonly NFS_PORT=2049
 
 # Assert that the nfs server is running 
 # Args:

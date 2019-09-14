@@ -238,8 +238,14 @@ function mi_setup_dot_files() {
 #
 function mi_mount_nfs_share() {
   local user=$(get_user)
-  local -r HOST=$(whiptail --inputbox "Enter the server ip or hostname" 8 78 \
+  # Using local inline changes the return value for some reason
+  local HOST
+  HOST=$(whiptail --inputbox "Enter the server ip or hostname" 8 78 \
     --title "Mount nfs" 3>&1 1>&2 2>&3)
+ 
+  # using return in this function will not work, since it would only make the function return 1
+  # the empty command (:) is used as dummy and the return value of the functions comparison is used 
+  if_cancel : && return 1
   source "$THIS_PATH/mount_nfs_share.sh" -i
   
   clear
@@ -259,24 +265,27 @@ function mi_mount_nfs_share() {
     items[$(((c++)))]=""
     items[$(((c++)))]=ON
   done <<< "$EXPORTS"
-
-  local selection=$(whiptail --title "Select shares to mount" --checklist \
+  
+  local selection
+  selection=$(whiptail --title "Select shares to mount" --checklist \
     "Use space to select a share" 25 100 16 \
     "${items[@]}" \
     3>&1 1>&2 2>&3)
 
+  if_cancel : && return 1
   clear 
 
   for s in $selection; do
     local share=$(echo "$s" | tr -d "\"")
     if ! check_not_mounted "${HOST}:${share}"; then 
-      pause
       continue
     fi
 
     local default_dir="/media/${user}/$(basename "$share")"
-    local dir=$(whiptail --inputbox "Enter a path to mount $share"  8 78 "$default_dir"\
+    local dir
+    dir=$(whiptail --inputbox "Enter a path to mount $share"  8 78 "$default_dir"\
       --title "Mount nfs" 3>&1 1>&2 2>&3)
+    if_cancel : && continue
     if ! mount_share "${HOST}:$share" "$dir"; then 
       continue
     fi

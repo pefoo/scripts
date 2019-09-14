@@ -221,6 +221,10 @@ function mi_setup_dot_files() {
     git_mail=$(whiptail --inputbox "Please enter your git email." 8 78 \
       --title "Setup dot files" 3>&1 1>&2 2>&3)
     if_cancel && exit 1
+    if [ -z "$git_mail" ];then 
+      log_error "Empty email is not allowed"
+      exit 1
+    fi
 
     source "$LINKER_SCRIPT" -b "$CONFIGS_DIR/dotfiles" -u "$git_user" -m "$git_mail"
   ' "$THIS_PATH" "$NEWT_COLORS" "$(declare -f if_cancel)"

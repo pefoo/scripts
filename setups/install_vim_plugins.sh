@@ -22,6 +22,7 @@ declare -Ar PLUGINS=(
   [completor]="https://github.com/maralla/completor.vim.git"
   [gruvbox]="https://github.com/morhetz/gruvbox.git"
   [airline]="https://github.com/vim-airline/vim-airline"
+  [ctrlp]="https://github.com/ctrlpvim/ctrlp.vim.git"
   )
 
 readonly PLUGIN_BASE_DIR="$HOME/.vim/pack/default"

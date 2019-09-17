@@ -17,6 +17,13 @@ function usage {
   exit 1
 }
 
+# List all exports 
+function list_exports {
+  exports=$(showmount -e localhost | tail -n 2)
+  log_msg "List of current exports:"
+  log_msg "$exports"
+}
+
 share="$1"
 if [ -z "$share" ];then 
   usage
@@ -34,8 +41,16 @@ cp /etc/exports /etc/exports.bak
 # I bet there is a way to get this without the cut 
 # This generates an ip range (full access for all ips that start with the first three octets of the current machines ip)
 ip_net="$(ip route get 8.8.8.8 | awk -F"src " 'NR==1{split($2,a," ");print a[1]}' | cut -c1-12)0/255.255.255.0"
-echo "$share $ip_net(rw,async)" >> /etc/exports
+readonly EXPORT="$share $ip_net(rw,async)"
+if grep -q "$EXPORT" /etc/exports; then 
+  log_warn "The share $share is already exported"
+  list_exports
+  exit 1
+fi
+echo "$EXPORT" >> /etc/exports
 
 # Reload exports 
 log_msg "Reloading the exports"
 exportfs -ra 
+
+list_exports

@@ -302,7 +302,7 @@ function mi_create_nfs_share() {
   share=$(whiptail --inputbox "Please enter the path to the folder you want to share." 8 78 "$share" \
     --title "Create nfs share" 3>&1 1>&2 2>&3)
 
-  source "$THIS_PATH/create_nfs_share.sh" "$share"
+  source "$THIS_PATH/create_nfs_export.sh" "$share"
   pause
   
 }

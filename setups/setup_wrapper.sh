@@ -293,6 +293,20 @@ function mi_mount_nfs_share() {
   pause
 }
 
+# 
+# Create nfs share menu item implementation 
+# Creates a new network file system share 
+#
+function mi_create_nfs_share() {
+  local share
+  share=$(whiptail --inputbox "Please enter the path to the folder you want to share." 8 78 "$share" \
+    --title "Create nfs share" 3>&1 1>&2 2>&3)
+
+  source "$THIS_PATH/create_nfs_share.sh" "$share"
+  pause
+  
+}
+
 #
 # Menu loop 
 #
@@ -303,6 +317,7 @@ while true; do
   menu_items[6]="4"; menu_items[7]="Install vim plugins"
   menu_items[8]="5"; menu_items[9]="Setup dot files"
   menu_items[10]="6"; menu_items[11]="Mount nfs share"
+  menu_items[12]="7"; menu_items[13]="Create nfs share"
 
   selection=$(whiptail --title "System setup" --menu "Main menu" --cancel-button "Exit" \
     25 100 16 "${menu_items[@]}" 3>&1 1>&2 2>&3)
@@ -327,6 +342,9 @@ while true; do
       ;;
     "6")
       mi_mount_nfs_share
+      ;;
+    "7")
+      mi_create_nfs_share
       ;;
     *)
       clear

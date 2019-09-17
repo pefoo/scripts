@@ -23,7 +23,7 @@ if [ -z "$share" ];then
   exit 0
 fi 
 
-if [ -d "$share" ];then 
+if [ ! -d "$share" ];then 
   log_error "The folder $share does not exist."
   exit 0
 fi
@@ -34,7 +34,7 @@ cp /etc/exports /etc/exports.bak
 # I bet there is a way to get this without the cut 
 # This generates an ip range (full access for all ips that start with the first three octets of the current machines ip)
 ip_net="$(ip route get 8.8.8.8 | awk -F"src " 'NR==1{split($2,a," ");print a[1]}' | cut -c1-12)0/255.255.255.0"
-echo "$drive $ip_net(rw,async)" >> /etc/exports
+echo "$share $ip_net(rw,async)" >> /etc/exports
 
 # Reload exports 
 log_msg "Reloading the exports"

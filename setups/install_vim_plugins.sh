@@ -23,6 +23,8 @@ declare -Ar PLUGINS=(
   [gruvbox]="https://github.com/morhetz/gruvbox.git"
   [airline]="https://github.com/vim-airline/vim-airline"
   [ctrlp]="https://github.com/ctrlpvim/ctrlp.vim.git"
+  [nerdtree]="https://github.com/scrooloose/nerdtree.git"
+  [nerdtree_git]="https://github.com/Xuyuanp/nerdtree-git-plugin.git"
   )
 
 readonly PLUGIN_BASE_DIR="$HOME/.vim/pack/default"

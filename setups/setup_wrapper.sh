@@ -67,6 +67,32 @@ function get_user() {
   echo "$user"
 }
 
+#
+# Execute a function in user context.
+# Declare is used to get the function definition of the passed function. 
+# This definition is passed to the user shell, executed and eventually called.
+# The following functions / definitions are available:
+#   - the helper function if_cancel and if_not_cancel
+#   - THIS_PATH variable 
+#   - Whiptail color setup 
+#
+# Args:
+#   1) The name of the function to execute 
+#
+function execute_as_user() {
+  local user=$(get_user)
+  sudo -H -u "$user" bash -c '
+    readonly THIS_PATH="$0"
+    export NEWT_COLORS="$1"
+    eval "$2"
+    eval "$3"
+    eval "$4"
+    eval "$(echo "$4" | head -n1 | grep -oP "^\\w[\\w\\d_]*")"
+   ' \
+    "$THIS_PATH" "$NEWT_COLORS" \
+    "$(declare -f if_cancel)" "$(declare -f if_not_cancel)" \
+    "$(declare -f "$1")"
+}
 
 #
 # Implementation of Update packages menu item 
@@ -114,15 +140,8 @@ function mi_install_packages() {
 # Provide a list of common extensions and install the selected ones
 #
 function mi_install_gnome_extensions() {
-  local user=$(get_user)
-
-  # Run the gnome extension management in a subshell that is owned by the actual user (not root)
-  # current path and the whiptail color scheme is passed to the subshell 
-  sudo -H -u "$user" bash -c '
+  function install_gnome_extensions_as_user() {
     source "$0/install_gnome_extensions.sh" -i
-    export NEWT_COLORS="$1"
-    eval "$2"
-
     # Build the menu using the extensions provided by the script 
     c=0
     for extension in "${!EXTENSIONS[@]}"; do
@@ -144,7 +163,9 @@ function mi_install_gnome_extensions() {
     clear 
     install_prerequisites
     install_extensions $(echo "$selection" | tr -d "\"")
-  ' "$THIS_PATH" "$NEWT_COLORS" "$(declare -f if_cancel)"
+  }
+
+  execute_as_user "install_gnome_extensions_as_user"
   if_not_cancel && pause
 }
 
@@ -152,14 +173,9 @@ function mi_install_gnome_extensions() {
 # Implementation of the install vim plugins menu item 
 #
 function mi_install_vim_plugins() {
-  local user=$(get_user)
-
-  sudo -H -u "$user" bash -c '
+  function install_vim_plugins_as_user() {
     clear
     source "$0/install_vim_plugins.sh" -i
-    export NEWT_COLORS="$1"
-    eval "$2"
-
     c=0
     for plugin in "${!PLUGINS[@]}"; do
       items[$(((c++)))]="$plugin"
@@ -181,7 +197,8 @@ function mi_install_vim_plugins() {
       plugin=$(echo "$s" | tr -d "\"")
       install_plugin "$plugin" "${PLUGINS[$plugin]}"
     done
-  ' "$THIS_PATH" "$NEWT_COLORS" "$(declare -f if_cancel)"
+  }
+  execute_as_user "install_vim_plugins_as_user"
   if_not_cancel && pause
 }
 
@@ -189,12 +206,8 @@ function mi_install_vim_plugins() {
 # Implementation of the setup dot files menu item 
 #
 function mi_setup_dot_files() {
-  local user=$(get_user)
-  sudo -H -u "$user" bash -c '
+  function setup_dot_files_as_user() {
     source "$0/../functions/log.sh"
-    export NEWT_COLORS="$1"
-    eval "$2"
-
     readonly CONFIGS_DIR="$HOME/configs"
     readonly LINKER_SCRIPT="${CONFIGS_DIR}/dotfiles/link_dotfiles.sh"
 
@@ -227,7 +240,8 @@ function mi_setup_dot_files() {
     fi
 
     source "$LINKER_SCRIPT" -b "$CONFIGS_DIR/dotfiles" -u "$git_user" -m "$git_mail"
-  ' "$THIS_PATH" "$NEWT_COLORS" "$(declare -f if_cancel)"
+  }
+  execute_as_user "setup_dot_files_as_user"
   if_not_cancel && pause
 
 }

@@ -18,13 +18,22 @@ source "$THIS_PATH/../functions/log.sh"
 
 # List of common plugins 
 declare -Ar PLUGINS=(
+  # A linter 
   [ale]="https://github.com/w0rp/ale.git"
+  # Auto complete 
   [completor]="https://github.com/maralla/completor.vim.git"
+  # Color scheme 
   [gruvbox]="https://github.com/morhetz/gruvbox.git"
+  # Status line 
   [airline]="https://github.com/vim-airline/vim-airline"
+  # Search for files / (c)tags
   [ctrlp]="https://github.com/ctrlpvim/ctrlp.vim.git"
+  # Tree navigation 
   [nerdtree]="https://github.com/scrooloose/nerdtree.git"
+  # Tree navigation git integraiton 
   [nerdtree_git]="https://github.com/Xuyuanp/nerdtree-git-plugin.git"
+  # Auto generate tags 
+  [gutentags]="https://github.com/ludovicchabant/vim-gutentags.git"
   )
 
 readonly PLUGIN_BASE_DIR="$HOME/.vim/pack/default"

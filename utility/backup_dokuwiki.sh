@@ -24,6 +24,6 @@ mkdir -p "$BACKUPPATH"
 backup_file=$(get_backup_file_name 'dokuwiki' 'tar.bz2')
 
 pushd "$WIKIPATH/.." > /dev/null
-tar --exlcude='tmp' --exclude='cache' --exclude='index' --exclude='locks' -cjf "$BACKUPPATH/$backup_file" "$(basename "$WIKIPATH")"
+tar --exclude='tmp' --exclude='cache' --exclude='index' --exclude='locks' -cjf "$BACKUPPATH/$backup_file" "$(basename "$WIKIPATH")"
 popd > /dev/null
 cleanup_backups "$MAXBACKUPS" "$BACKUPPATH" 'dokuwiki*.tar.bz2'

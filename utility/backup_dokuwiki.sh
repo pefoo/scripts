@@ -11,7 +11,7 @@ readonly THIS_PATH=$(dirname $(realpath $0))
 source "$THIS_PATH/../functions/backup_utils.sh"
 
 readonly WIKIPATH="$1"
-readonly BACKUPPATH=$(realpath "$2")
+readonly BACKUPPATH=$(realpath "$2" 2>/dev/null)
 readonly MAXBACKUPS="$3"
 
 # using -v/-z doesnt do the trick here. No idea why
@@ -24,6 +24,6 @@ mkdir -p "$BACKUPPATH"
 backup_file=$(get_backup_file_name 'dokuwiki' 'tar.bz2')
 
 pushd "$WIKIPATH/.." > /dev/null
-tar -cjf "$BACKUPPATH/$backup_file" "$(basename "$WIKIPATH")"
+tar --exlcude='tmp' --exclude='cache' --exclude='index' --exclude='locks' -cjf "$BACKUPPATH/$backup_file" "$(basename "$WIKIPATH")"
 popd > /dev/null
 cleanup_backups "$MAXBACKUPS" "$BACKUPPATH" 'dokuwiki*.tar.bz2'

@@ -34,6 +34,8 @@ declare -Ar PLUGINS=(
   [nerdtree_git]="https://github.com/Xuyuanp/nerdtree-git-plugin.git"
   # Auto generate tags 
   [gutentags]="https://github.com/ludovicchabant/vim-gutentags.git"
+  # Indent guides]
+  [indent_guides]="https://github.com/nathanaelkane/vim-indent-guides.git"
   )
 
 readonly PLUGIN_BASE_DIR="$HOME/.vim/pack/default"
@@ -46,7 +48,7 @@ function install_plugin() {
   local plugin="$1"
   local source_url="$2"
 
-  if [ -z "$plugin" ] || [ -z "source_url" ]; then 
+  if [ -z "$plugin" ] || [ -z "$source_url" ]; then 
     log_error "Provide a plugin name and source url for the vim plugin you want to install"
     return 1
   fi

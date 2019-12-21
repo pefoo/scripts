@@ -22,7 +22,7 @@ cat << EOF > "$OUTPUT_FILE"
 [//]: # (################################################################################################)
 EOF
 
-find "$WORKING_DIR" -type f -print0 -name '[0-9]*.tex' |
+find "$WORKING_DIR" -type f -name '[0-9]*.tex' -print0 |
   sort -z | 
   xargs -0 cat |
   grep -Pzo '(?s)(\\(sub)*section|\\chapter){([\w\s\d]+)}\s*(\\iffalse(.*?)\\fi)?\s?'  >> "$OUTPUT_FILE"

@@ -36,6 +36,8 @@ declare -Ar PLUGINS=(
   [gutentags]="https://github.com/ludovicchabant/vim-gutentags.git"
   # Indent guides]
   [indent_guides]="https://github.com/nathanaelkane/vim-indent-guides.git"
+  # Auto save 
+  [autosave]="https://github.com/907th/vim-auto-save.git"
   )
 
 readonly PLUGIN_BASE_DIR="$HOME/.vim/pack/default"

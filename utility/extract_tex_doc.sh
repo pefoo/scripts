@@ -14,10 +14,11 @@ fi
 readonly WORKING_DIR="$1" 
 readonly OUTPUT_FILE="$WORKING_DIR/tex_doc.md"
 
+if [ -f "$OUTPUT_FILE" ];then rm "$OUTPUT_FILE"; fi
+
 cat << EOF > "$OUTPUT_FILE"
 [//]: # (################################################################################################)
 [//]: # (THIS FILE WAS AUTO GENERATED USING $(basename "$0"). DO NOT MODIFY IT DIRECTLY)
-[//]: # ($(date '+%d.%m.%Y %H:%M:%S'))
 [//]: # (################################################################################################)
 EOF
 

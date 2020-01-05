@@ -38,6 +38,8 @@ declare -Ar PLUGINS=(
   [indent_guides]="https://github.com/nathanaelkane/vim-indent-guides.git"
   # Auto save 
   [autosave]="https://github.com/907th/vim-auto-save.git"
+  # Signify - display line change indicators 
+  [signify]="https://github.com/mhinz/vim-signify.git"
   )
 
 readonly PLUGIN_BASE_DIR="$HOME/.vim/pack/default"

@@ -40,6 +40,8 @@ declare -Ar PLUGINS=(
   [autosave]="https://github.com/907th/vim-auto-save.git"
   # Signify - display line change indicators 
   [signify]="https://github.com/mhinz/vim-signify.git"
+  # Tagbar - display outline 
+  [tagbar]="https://github.com/majutsushi/tagbar.git"
   )
 
 readonly PLUGIN_BASE_DIR="$HOME/.vim/pack/default"

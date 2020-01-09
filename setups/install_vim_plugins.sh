@@ -42,6 +42,8 @@ declare -Ar PLUGINS=(
   [signify]="https://github.com/mhinz/vim-signify.git"
   # Tagbar - display outline 
   [tagbar]="https://github.com/majutsushi/tagbar.git"
+  # vim signature - display marks in gutter 
+  [vim-signature]="https://github.com/kshenoy/vim-signature.git"
   )
 
 readonly PLUGIN_BASE_DIR="$HOME/.vim/pack/default"

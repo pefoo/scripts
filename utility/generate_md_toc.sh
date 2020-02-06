@@ -70,6 +70,8 @@ main() {
     for heading in "${headings[@]}"; do
       build_toc_line "$heading" >> "$doc"
     done 
+    # Github requires this newline ;) 
+    echo "" >> "$doc"
     echo "$end_marker" >> "$doc"
 
     # Append the origial file but without the previous toc 

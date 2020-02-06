@@ -4,6 +4,9 @@
 # Generate a table of contents for arbitrary markdown files. 
 # The toc is replaced everything the script is executed. 
 #
+# Remarks:
+#   Using 1. to create a numbered nested list seems to be quite broken for github. Some nesting levels just wont work. ¯\_(ツ)_/¯
+#
 
 # Entry point 
 # Globals:
@@ -108,10 +111,10 @@ build_toc_line() {
   local nesting
   # Replace everything from back to first space (get rid of the actual heading text
   nesting=${heading%% *}
-  # Replace the LAST # with a 1.
-  nesting=$(echo "$nesting" | sed -e 's/\(#*\)#/\11./')
+  # Replace the LAST # with a dash (-) 
+  nesting=$(echo "$nesting" | sed -e 's/\(#*\)#/\1-/')
   # Replace remaining # with whitespace (in order to nest subsections in the list)
-  nesting=$(echo "$nesting" | sed -e 's/#/    /g')
+  nesting=$(echo "$nesting" | sed -e 's/#/  /g')
 
   local title
   # Get the title without leading # 

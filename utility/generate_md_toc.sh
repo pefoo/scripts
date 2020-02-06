@@ -2,6 +2,7 @@
 
 #
 # Generate a table of contents for arbitrary markdown files. 
+# The toc is replaced everything the script is executed. 
 #
 
 # Entry point 
@@ -50,13 +51,29 @@ main() {
   fi
 
   if [ "$replace_inline" == true ]; then 
+    # Backup and clear the file 
     cp "$doc" "$doc.bak"
     truncate -s 0 "$doc"
+
+    # Define some markers to be placed in the file 
+    local start_marker
+    local sed_start_marker
+    local end_marker
+    local sed_end_marker
+    start_marker="[//]: # (###### AUTO GENERATED TOC START ######)"
+    end_marker="[//]: # (###### AUTO GENERATED TOC END ######)"
+    sed_start_marker="\[\/\/\]: # (###### AUTO GENERATED TOC START ######)"
+    sed_end_marker="\[\/\/\]: # (###### AUTO GENERATED TOC END ######)"
+
+    # Create a toc in the (yet empty) file 
+    echo "$start_marker" >> "$doc"
     for heading in "${headings[@]}"; do
       build_toc_line "$heading" >> "$doc"
     done 
-    echo -e "\n" >> "$doc"
-    cat "$doc.bak" >> "$doc"
+    echo "$end_marker" >> "$doc"
+
+    # Append the origial file but without the previous toc 
+    sed "/$sed_start_marker/,/$sed_end_marker/d" "$doc.bak" >> "$doc"
   else 
     for heading in "${headings[@]}"; do
       build_toc_line "$heading"

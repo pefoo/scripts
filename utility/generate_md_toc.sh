@@ -111,7 +111,7 @@ build_toc_line() {
   # Replace the LAST # with a 1.
   nesting=$(echo "$nesting" | sed -e 's/\(#*\)#/\11./')
   # Replace remaining # with whitespace (in order to nest subsections in the list)
-  nesting=$(echo "$nesting" | sed -e 's/#/  /g')
+  nesting=$(echo "$nesting" | sed -e 's/#/    /g')
 
   local title
   # Get the title without leading # 

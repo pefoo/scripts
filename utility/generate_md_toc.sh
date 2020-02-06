@@ -103,6 +103,8 @@ build_toc_line() {
   local link
   # Replace whitespace in title with - in order to build the page anchor link
   link=${title// /-}
+  # Remove special characters from the page anchor link 
+  link="$(echo "$link" | sed -e 's/[\(\)\.]//g')"
 
   echo "$nesting [$title](#${link})"
 }

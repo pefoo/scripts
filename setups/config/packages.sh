@@ -66,6 +66,11 @@ ${ENV_DESKTOP}"
 Good old vim;\
 $ENV_ALL"
 
+[ctags]=\
+"$OFFICIAL_PACKAGE;\
+exuberant-ctags ;\
+$ENV_ALL"
+
 [tmux]=\
 "$OFFICIAL_PACKAGE;\
 Terminal multiplexer;\

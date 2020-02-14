@@ -4,7 +4,7 @@
 
 # Already installed 
 if command -v google-chrome-stable > /dev/null; then 
-  exit 0
+  return 0
 fi 
 
 package_name="google-chrome-stable_current_amd64.deb"

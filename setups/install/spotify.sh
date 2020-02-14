@@ -3,7 +3,7 @@
 #
 
 if command -v spotify > /dev/null; then 
-  exit 0
+  return 0
 fi
 
 # Add spotify repository key 

@@ -41,10 +41,25 @@ readonly ENV_ODROID="odroid"
 readonly ENV_ALL="${ENV_MINIMAL},${ENV_DESKTOP},${ENV_SERVER},${ENV_ODROID}"
 
 declare -Ar PACKAGES=(
-[test_dummy]=\
-"$(get_script_path)/../install/install_dummy.sh;\
-Good old foobar test;\
-$ENV_ALL"
+[google-chrome]=\
+"$(get_script_path)/../install/google-chrome.sh;\
+Google chrome;\
+${ENV_DESKTOP}"
+
+[spotify]=\
+"$(get_script_path)/../install/spotify.sh;\
+Spotify;\
+${ENV_DESKTOP}"
+
+[nautilus-dropbox]=\
+"$OFFICIAL_PACKAGE;\
+Dropbox;\
+${ENV_DESKTOP}"
+
+[keepassxc]=\
+"$OFFICIAL_PACKAGE;\
+KeePassXC ;\
+${ENV_DESKTOP}"
 
 [vim]=\
 "$OFFICIAL_PACKAGE;\

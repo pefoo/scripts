@@ -157,7 +157,9 @@ install_environment() {
       else 
         log_msg "Installing package using custom script: $value"
         print_config "$package" "${PACKAGES[$package]}" | sed -e 's/^/    /'
-        source "$value"
+        if ! source "$value"; then 
+          log_error "Failed to install package ${package}!"
+        fi 
       fi
     fi
   done

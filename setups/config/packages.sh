@@ -38,7 +38,8 @@ readonly ENV_MINIMAL="minimal"
 readonly ENV_DESKTOP="desktop"
 readonly ENV_SERVER="server"
 readonly ENV_ODROID="odroid"
-readonly ENV_ALL="${ENV_MINIMAL},${ENV_DESKTOP},${ENV_SERVER},${ENV_ODROID}"
+readonly ENV_LATEX_DEV="latex"
+readonly ENV_ALL="${ENV_MINIMAL},${ENV_DESKTOP},${ENV_SERVER},${ENV_ODROID},${ENV_LATEX_DEV}"
 
 declare -Ar PACKAGES=(
 [google-chrome]=\
@@ -115,6 +116,31 @@ ${ENV_SERVER},${ENV_ODROID}"
 "$OFFICIAL_PACKAGE;\
 NTFS driver;\
 ${ENV_ODROID}"
+
+[latexmk]=\
+"$OFFICIAL_PACKAGE;\
+Latexmk - build latex docs;\
+${ENV_LATEX_DEV}"
+
+[texlive-latex-extra]=\
+"$OFFICIAL_PACKAGE;\
+Latex packages;\
+${ENV_LATEX_DEV}"
+
+[texlive-bibtex-extra]=\
+"$OFFICIAL_PACKAGE;\
+Latex packages;\
+${ENV_LATEX_DEV}"
+
+[texlive-lang-german]=\
+"$OFFICIAL_PACKAGE;\
+Latex packages for german text;\
+${ENV_LATEX_DEV}"
+
+[biber]=\
+"$OFFICIAL_PACKAGE;\
+BibTex replacement for BibLaTeX;\
+${ENV_LATEX_DEV}"
 )
 
 # Print an environment configuration 

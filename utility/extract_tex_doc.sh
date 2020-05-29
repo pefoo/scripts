@@ -30,6 +30,8 @@ find "$WORKING_DIR" -type f -name '[0-9]*.tex' -print0 |
 
 # Replace null characters with new lines 
 sed -i -e 's/\x0/\n/g' "$OUTPUT_FILE"
+# Replace section labels 
+sed -i -e 's/\\label{.*}//g' "$OUTPUT_FILE"
 # Replace section types 
 sed -i -e 's/\\chapter/\n# /g' "$OUTPUT_FILE"
 sed -i -e 's/\\section/\n## /g' "$OUTPUT_FILE"

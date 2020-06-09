@@ -25,6 +25,7 @@ EOF
 find "$WORKING_DIR" -type f -name '[0-9]*.tex' -print0 |
   sort -z | 
   xargs -0 cat |
+  sed '/^%/d' |
   grep -Pzo '(?s)(\\(sub)*section|\\chapter){([ÄÖÜäöü\w\s\d\/]+)}\s*(\\label{.*?})?\s*(\\iffalse(.*?)\\fi)?\s?'  >> "$OUTPUT_FILE"
  
 

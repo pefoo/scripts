@@ -34,7 +34,7 @@ Add a hibernate button to the menu;\
 "
 
 [No_title_bar]=\
-"1267;\
+"723;\
 Remove the application title when window is maximized;\
 "
 
@@ -43,23 +43,13 @@ Remove the application title when window is maximized;\
 Load shell themes from user directory;\
 "
 
-[Workspace_grid]=\
-"484;\
+[Workspace_matrix]=\
+"1485;\
 Display workspaces as grid;\
-"
-
-[Multi_monitor_fix]=\
-"1066;\
-Fix multi monitor setups;\
 "
 
 [System_monitor]=\
 "120;\
 System monitor in top panel;\
-gir1.2-gtop-2.0 gir1.2-networkmanager-1.0  gir1.2-clutter-1.0"
-
-[Do_not_disturb_button]=\
-"964;\
-Do not disturb buttin;\
-"
+gir1.2-clutter-1.0 gir1.2-clutter-gst-3.0 gir1.2-gtkclutter-1.0 gir1.2-gtop-2.0"
 )

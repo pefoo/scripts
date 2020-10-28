@@ -67,6 +67,11 @@ ${ENV_DESKTOP}"
 Good old vim;\
 $ENV_ALL"
 
+[fonts-powerline]=\
+"$OFFICIAL_PACKAGE;\
+Patched and adjusted fonts for vim powerline / airline;\
+$ENV_ALL"
+
 [ctags]=\
 "$OFFICIAL_PACKAGE;\
 exuberant-ctags ;\

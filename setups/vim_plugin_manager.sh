@@ -109,7 +109,6 @@ install_plugin() {
     if [ "$VERBOSE_MODE" == true ]; then 
       print_config "$plugin" "$2" | sed -e 's/^/    /'
     fi
-    echo ""
   fi
 }
 

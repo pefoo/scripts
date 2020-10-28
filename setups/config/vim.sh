@@ -29,6 +29,10 @@ default"
 A quite dark color scheme;\
 default"
 
+[vscode-dark-theme]="https://github.com/tomasiser/vim-code-dark.git;\
+A quite dark color scheme;\
+default"
+
 [airline]="https://github.com/vim-airline/vim-airline;\
 A status line;\
 default"
@@ -67,5 +71,9 @@ default"
 
 [vim-signature]="https://github.com/kshenoy/vim-signature.git;\
 Display (jump) marks in gutter;\
+default"
+
+[fugitive]="https://github.com/tpope/vim-fugitive.git;\
+Git plugin;\
 default"
 )

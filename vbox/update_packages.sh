@@ -11,8 +11,8 @@
 main() {
   # shellcheck source=../functions/log.sh
   source "$(get_script_path)/../functions/log.sh"
-  # shellcheck source=./vbox_utils.sh
-  source "$(get_script_path)/vbox_utils.sh"
+  # shellcheck source=./vbox_helper.sh
+  source "$(get_script_path)/vbox_helper.sh"
 
   local vm_user="$USER"
   while getopts "u:" o; do
@@ -46,7 +46,7 @@ main() {
     exit $result
   fi
   local vm_ip
-  vm_ip=$(vboxmanage guestproperty get "$vm_name" /VirtualBox/GuestInfo/Net/0/V4/IP | grep -oP 'Value:\s\K.*')
+  vm_ip=guestproperty_get "$vm_name" "$GUESTPROPERTY_IP_V4"
   if [ -z "$vm_ip" ]; then 
     log_error "Failed to get the VM ip!!"
     exit 1

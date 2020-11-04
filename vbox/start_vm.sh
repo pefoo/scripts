@@ -10,8 +10,8 @@
 main() {
   # shellcheck source=../functions/log.sh
   source "$(get_script_path)/../functions/log.sh"
-  # shellcheck source=./vbox_utils.sh
-  source "$(get_script_path)/vbox_utils.sh"
+  # shellcheck source=./vbox_helper.sh
+  source "$(get_script_path)/vbox_helper.sh"
 
   local no_wait=false
   local headless=false
@@ -72,22 +72,22 @@ main() {
     exit 0
   fi
   echo "Waiting for user to login ..." 1> $stdout
-  vboxmanage guestproperty wait "$vm_name" "/VirtualBox/GuestInfo/OS/LoggedInUsers" > /dev/null
+  vboxmanage guestproperty wait "$vm_name" "$GUESTPROPERTY_LOGGED_IN_USERS" > /dev/null
 
   local ip
   local hostname
   local logged_in_users
-  ip=$(vboxmanage guestproperty get "$vm_name" /VirtualBox/GuestInfo/Net/0/V4/IP | grep -oP 'Value:\s\K.*')
+  ip=$(guestproperty_get "$vm_name" "$GUESTPROPERTY_IP_V4")
   while [ -z "$ip" ]; do
-    ip=$(vboxmanage guestproperty get "$vm_name" /VirtualBox/GuestInfo/Net/0/V4/IP | grep -oP 'Value:\s\K.*')
     sleep 5
+    ip=$(guestproperty_get "$vm_name" "$GUESTPROPERTY_IP_V4")
   done
   hostname=$(nslookup "$ip" | grep -oP 'name = \K.*\b')
   # <3 VirtualBox! Even though we just waited for LoggedInUsers, the user did not actually log in yet. 
-  logged_in_users=$(vboxmanage guestproperty get "$vm_name" /VirtualBox/GuestInfo/OS/LoggedInUsersList | grep -oP 'Value:\s\K.*')
+  logged_in_users=$(guestproperty_get "$vm_name" "$GUESTPROPERTY_LOGGED_IN_USERS_LIST")
   while [ -z "$logged_in_users" ]; do
     sleep 5
-    logged_in_users=$(vboxmanage guestproperty get "$vm_name" /VirtualBox/GuestInfo/OS/LoggedInUsersList | grep -oP 'Value:\s\K.*')
+    logged_in_users=$(guestproperty_get "$vm_name" "$GUESTPROPERTY_LOGGED_IN_USERS_LIST")
   done 
 
   if $verbose; then 

@@ -33,7 +33,7 @@ default"
 A quite dark color scheme;\
 default"
 
-[airline]="https://github.com/vim-airline/vim-airline;\
+[airline]="https://github.com/vim-airline/vim-airline.git;\
 A status line;\
 default"
 

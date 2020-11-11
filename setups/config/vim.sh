@@ -76,4 +76,8 @@ default"
 [fugitive]="https://github.com/tpope/vim-fugitive.git;\
 Git plugin;\
 default"
+
+[floatterm]="https://github.com/voldikss/vim-floaterm.get;\
+Floating terminal in vim;\
+default"
 )

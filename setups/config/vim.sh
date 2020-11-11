@@ -77,7 +77,7 @@ default"
 Git plugin;\
 default"
 
-[floatterm]="https://github.com/voldikss/vim-floaterm.get;\
+[floatterm]="https://github.com/voldikss/vim-floaterm.git;\
 Floating terminal in vim;\
 default"
 )

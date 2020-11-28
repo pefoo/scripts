@@ -46,7 +46,7 @@ main() {
     exit $result
   fi
   local vm_ip
-  vm_ip=guestproperty_get "$vm_name" "$GUESTPROPERTY_IP_V4"
+  vm_ip=$(guestproperty_get "$vm_name" "$GUESTPROPERTY_IP_V4")
   if [ -z "$vm_ip" ]; then 
     log_error "Failed to get the VM ip!!"
     exit 1

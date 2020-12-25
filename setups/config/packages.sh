@@ -52,11 +52,6 @@ ${ENV_DESKTOP}"
 Spotify;\
 ${ENV_DESKTOP}"
 
-[nautilus-dropbox]=\
-"$OFFICIAL_PACKAGE;\
-Dropbox;\
-${ENV_DESKTOP}"
-
 [keepassxc]=\
 "$OFFICIAL_PACKAGE;\
 KeePassXC ;\

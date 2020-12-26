@@ -10,7 +10,7 @@ fi
 package_name="google-chrome-stable_current_amd64.deb"
 wget https://dl.google.com/linux/direct/${package_name}
 
-sudo apt install "./${package_name}"
+sudo apt install -qqy "./${package_name}"
 rm "./${package_name}"
 
 if ! command -v google-chrome-stable > /dev/null; then 

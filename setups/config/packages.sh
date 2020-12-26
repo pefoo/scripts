@@ -52,17 +52,12 @@ ${ENV_DESKTOP}"
 Spotify;\
 ${ENV_DESKTOP}"
 
-[nautilus-dropbox]=\
-"$OFFICIAL_PACKAGE;\
-Dropbox;\
-${ENV_DESKTOP}"
-
 [keepassxc]=\
 "$OFFICIAL_PACKAGE;\
 KeePassXC ;\
 ${ENV_DESKTOP}"
 
-[vim]=\
+[vim-nox]=\
 "$OFFICIAL_PACKAGE;\
 Good old vim;\
 $ENV_ALL"
@@ -72,7 +67,7 @@ $ENV_ALL"
 Patched and adjusted fonts for vim powerline / airline;\
 $ENV_ALL"
 
-[ctags]=\
+[exuberant-ctags]=\
 "$OFFICIAL_PACKAGE;\
 exuberant-ctags ;\
 $ENV_ALL"

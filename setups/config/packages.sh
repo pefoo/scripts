@@ -57,7 +57,7 @@ ${ENV_DESKTOP}"
 KeePassXC ;\
 ${ENV_DESKTOP}"
 
-[vim]=\
+[vim-nox]=\
 "$OFFICIAL_PACKAGE;\
 Good old vim;\
 $ENV_ALL"

@@ -67,7 +67,7 @@ $ENV_ALL"
 Patched and adjusted fonts for vim powerline / airline;\
 $ENV_ALL"
 
-[ctags]=\
+[exuberant-ctags]=\
 "$OFFICIAL_PACKAGE;\
 exuberant-ctags ;\
 $ENV_ALL"

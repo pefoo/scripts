@@ -75,14 +75,12 @@ main() {
   vboxmanage guestproperty wait "$vm_name" "$GUESTPROPERTY_LOGGED_IN_USERS" > /dev/null
 
   local ip
-  local hostname
   local logged_in_users
   ip=$(guestproperty_get "$vm_name" "$GUESTPROPERTY_IP_V4")
   while [ -z "$ip" ]; do
     sleep 5
     ip=$(guestproperty_get "$vm_name" "$GUESTPROPERTY_IP_V4")
   done
-  hostname=$(nslookup "$ip" | grep -oP 'name = \K.*\b')
   # <3 VirtualBox! Even though we just waited for LoggedInUsers, the user did not actually log in yet. 
   logged_in_users=$(guestproperty_get "$vm_name" "$GUESTPROPERTY_LOGGED_IN_USERS_LIST")
   while [ -z "$logged_in_users" ]; do
@@ -91,7 +89,11 @@ main() {
   done 
 
   if $verbose; then 
-    echo -e "\e[32mHostname:\t $hostname"
+    if command -v nslookup > /dev/null; then
+      local hostname
+      hostname=$(nslookup "$ip" | grep -oP 'name = \K.*\b')
+      echo -e "\e[32mHostname:\t $hostname"
+    fi
     echo -e "User:\t\t $logged_in_users\e[0m"
   fi
 }

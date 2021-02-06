@@ -60,7 +60,12 @@ ${ENV_DESKTOP}"
 [vim-nox]=\
 "$OFFICIAL_PACKAGE;\
 Good old vim;\
-$ENV_ALL"
+$ENV_DESKTOP"
+
+[vim]=\
+"$OFFICIAL_PACKAGE;\
+Good old vim;\
+$ENV_ODROID,$ENV_MINIMAL,$ENV_SERVER"
 
 [fonts-powerline]=\
 "$OFFICIAL_PACKAGE;\

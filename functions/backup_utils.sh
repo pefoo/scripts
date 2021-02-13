@@ -13,7 +13,7 @@
 get_backup_file_name() {
   local base="$1"
   local ext="$2"
-  echo "$base-$(date '+%d-%m-%Y').$ext"
+  echo "$base-$(date '+%Y-%m-%d').$ext"
 }
 
 # Cleanup old backups 

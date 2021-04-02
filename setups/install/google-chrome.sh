@@ -4,6 +4,7 @@
 
 # Already installed 
 if command -v google-chrome-stable > /dev/null; then 
+  echo 'Google chrome is already installed.'
   return 0
 fi 
 
@@ -17,3 +18,4 @@ if ! command -v google-chrome-stable > /dev/null; then
   echo "google-chrome-stable was not installed!"
   exit 1
 fi 
+echo 'Google chrome was successfully installed.'

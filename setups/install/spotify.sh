@@ -3,6 +3,7 @@
 #
 
 if command -v spotify > /dev/null; then 
+  echo 'Spotify is already installed.'
   return 0
 fi
 
@@ -18,3 +19,4 @@ if ! command -v spotify > /dev/null; then
   echo "Spotify was not installed"
   exit 1
 fi
+echo 'Spotify was successfully installed.'

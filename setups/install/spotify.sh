@@ -4,7 +4,7 @@
 
 if command -v spotify > /dev/null; then 
   echo 'Spotify is already installed.'
-  return 0
+  exit 0
 fi
 
 if ! command -v curl > /dev/null; then 

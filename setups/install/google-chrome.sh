@@ -5,7 +5,7 @@
 # Already installed 
 if command -v google-chrome-stable > /dev/null; then 
   echo 'Google chrome is already installed.'
-  return 0
+  exit 0
 fi 
 
 package_name="google-chrome-stable_current_amd64.deb"

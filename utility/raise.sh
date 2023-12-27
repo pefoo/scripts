@@ -12,12 +12,7 @@ if [[ "$XDG_SESSION_TYPE" == 'x11' ]]; then
   # search for the passed window / process
   xdotool search --class $1 | while read line
   do
-    # Try to activate the window
-    if [ `xdotool windowactivate $line 2> /dev/stdout | grep -c fail` -eq 0 ]
-      then
-      kill $PID
-      exit
-    fi
+    xdotool windowactivate $line 
   done
 # Most likely wayland: invoke gnome API using gdbus
 elif [[ "$XDG_CURRENT_DESKTOP" == 'GNOME' ]]; then

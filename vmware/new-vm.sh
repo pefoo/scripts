@@ -6,8 +6,7 @@ function usage() {
 Usage: new-vm.sh [options] RefVm VmName
 
 Clones a cloud-init prepared virtual machine. 
-The machine to clone has to have a snapshot named 'prepared'. Takes care of injecting cloud-init data and waiting for 
-cloud-init to finish. 
+Takes care of injecting cloud-init data and waiting for cloud-init to finish. 
 
 Options: 
   -l      Create a linked clone

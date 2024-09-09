@@ -17,10 +17,9 @@ function get_script_path() {
   popd > /dev/null
 }
 
-source "$(get_script_path)/../functions/log.sh"
 source "$(get_script_path)/vmware-utils.sh"
 if ! command -v cloud-localds &>/dev/null; then
-  log_error 'command: loud-localds not found. Please install cloud-utils'
+  vmware::log_error 'command: loud-localds not found. Please install cloud-utils'
   exit 1
 fi
 
@@ -28,11 +27,11 @@ vm_name=${*:$OPTIND:1}
 vmx=$(vmware::get_vmx "$vm_name")
 
 if [ -z "${vmx}" ]; then
-  log_error "VM $vm_name not found"
+  vmware::log_error "VM $vm_name not found"
   exit 1
 fi
 
->&2 log_msg "Deleting $vmx"
+vmware::log_msg "Deleting $vmx"
 
 if vmware::vm_is_running "$vmx"; then
   vmrun stop "$vmx" hard

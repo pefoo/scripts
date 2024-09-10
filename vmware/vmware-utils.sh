@@ -60,7 +60,6 @@ function vmware::start_vm {
   local vmx
   vmx=$(vmware::get_vmx "$1")
   if ! vmware::vm_is_running "$vmx"; then
-    echo 'Starting vm'
     vmrun start "$vmx"
 
     while [[ 'running' != $(vmrun CheckToolsState "$vmx" 2>/dev/null) ]]; do

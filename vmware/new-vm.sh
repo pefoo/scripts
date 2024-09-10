@@ -9,8 +9,10 @@ Clones a cloud-init prepared virtual machine.
 Takes care of injecting cloud-init data and waiting for cloud-init to finish. 
 
 Options: 
-  -l      Create a linked clone
-  -f      Fast(er) mode. Does not remove the iso used for cloud init (saves us a reboot)
+  -l        Create a linked clone
+  -f        Fast(er) mode. Does not remove the iso used for cloud init (saves us a reboot)
+  -c <int>  Sets the number of vCPUs
+  -m <int>  Sets the size of memory in MB
 
 Parameter: 
   RefVm   The vm to clone 
@@ -32,10 +34,14 @@ fi
 
 linked=false
 fast=false
-while getopts "lf" flag; do
+core_count=2
+memory=4096
+while getopts "lfc:m:" flag; do
   case "$flag" in
     l) linked=true; ;;
     f) fast=true; ;;
+    c) core_count=$OPTARG; ;;
+    m) memory=$OPTARG; ;;
     *) usage; exit 0;;
   esac
 done
@@ -88,6 +94,9 @@ cloud-localds "$seed_iso" '/tmp/user-data' '/tmp/meta-data'
 
 vmware::log_msg "Cloning $ref_name to $vm_name"
 vmrun clone "$vmx" "$destinationVmx" $additional_clone_args -cloneName="$vm_name"
+
+vmcli "$destinationVmx" Chipset SetVCpuCount "$core_count"
+vmcli "$destinationVmx" Chipset SetMemSize "$memory"
 
 vmware::log_msg 'Attaching cloud init iso'
 vmcli "$destinationVmx" Sata SetPresent sata0 1

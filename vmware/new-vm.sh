@@ -48,7 +48,6 @@ done
 
 ref_name=${*:$OPTIND:1}
 vm_name=${*:$OPTIND+1:1}
-seed_iso='/tmp/seed.iso'
 
 if [ -z "$vm_name" ]; then usage; exit 1; fi
 if [ -z "$ref_name" ]; then usage; exit 1; fi
@@ -80,17 +79,21 @@ if [ -f "$destinationVmx" ]; then
   exit 0
 fi
 
+metadataFile="/tmp/meta-data_${vm_name}"
+userdataFile="/tmp/user-data_${vm_name}"
+seed_iso="/tmp/seed_${vm_name}.iso"
+
 vmware::log_msg 'Creating cloud-init data iso'
-cat > /tmp/meta-data << EOF
+cat > "$metadataFile" << EOF
 instance-id: $vm_name
 local-hostname: $vm_name
 hostname: $vm_name
 EOF
 
-cat > /tmp/user-data << EOF
+cat > "$userdataFile" << EOF
 EOF
 
-cloud-localds "$seed_iso" '/tmp/user-data' '/tmp/meta-data'
+cloud-localds "$seed_iso" "$userdataFile" "$metadataFile"
 
 vmware::log_msg "Cloning $ref_name to $vm_name"
 vmrun clone "$vmx" "$destinationVmx" $additional_clone_args -cloneName="$vm_name"
@@ -111,7 +114,7 @@ if ! $fast; then
   vmrun stop "$destinationVmx"
   vmcli "$destinationVmx" disk setpresent sata0:0 0
 fi
-rm '/tmp/user-data' '/tmp/meta-data' "$seed_iso"
+rm "$metadataFile" "$userdataFile" "$seed_iso"
 
 if ! $fast; then
   vmware::log_msg 'Starting vm'

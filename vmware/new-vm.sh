@@ -13,6 +13,7 @@ Options:
   -f        Fast(er) mode. Does not remove the iso used for cloud init (saves us a reboot)
   -c <int>  Sets the number of vCPUs
   -m <int>  Sets the size of memory in MB
+  -i <IP>   Sets a static IP using netplan
 
 Parameter: 
   RefVm   The vm to clone 
@@ -36,12 +37,14 @@ linked=false
 fast=false
 core_count=2
 memory=4096
-while getopts "lfc:m:" flag; do
+static_ip=''
+while getopts "lfc:m:i:" flag; do
   case "$flag" in
     l) linked=true; ;;
     f) fast=true; ;;
     c) core_count=$OPTARG; ;;
     m) memory=$OPTARG; ;;
+    i) static_ip=$OPTARG; ;;
     *) usage; exit 0;;
   esac
 done
@@ -61,6 +64,11 @@ if [[ "$ref_name" != '*.vmx' ]]; then
   vmx=$(vmware::get_vmx "$ref_name")
 else
   vmx=$ref_name
+fi
+
+if [ -z "$vmx" ]; then 
+  vmware::log_error "Failed to find vm $ref_name"
+  exit 1
 fi
 destinationDir="$VMLOCATION/$vm_name"
 destinationVmx="$destinationDir/$vm_name.vmx"
@@ -90,8 +98,34 @@ local-hostname: $vm_name
 hostname: $vm_name
 EOF
 
-cat > "$userdataFile" << EOF
+touch "$userdataFile"
+if [ -n "$static_ip" ]; then 
+  vmware::log_msg "Setting static ip: $static_ip"
+  cat > "$userdataFile" << EOF
+#cloud-config
+write_files:
+- content: |
+    network:
+      version: 2
+      ethernets:
+        ens160:
+          addresses:
+            - $static_ip/24
+          dhcp4: false
+          dhcp6: false
+          nameservers:
+            addresses:
+              - 10.0.0.3
+              - 10.0.0.4
+            search:
+              - home.lan
+          routes:
+          - to: default
+            via: 10.0.0.1
+  path: /etc/netplan/70-static.yaml
+  owner: root:root
 EOF
+fi
 
 cloud-localds "$seed_iso" "$userdataFile" "$metadataFile"
 
